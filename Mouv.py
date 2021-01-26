@@ -6,22 +6,22 @@ res = (640,480)
 
 pygame.init()
 
+clock = pygame.time.Clock()
+
 pygame.display.set_caption("Worms")
 surface = pygame.display.set_mode(res, pygame.RESIZABLE)
 print(pygame.display.Info())
 
 bullet_color = (109,7,26)
+bullet = [10,400]
+pygame.draw.circle(surface, bullet_color, bullet, 10)
 
 arial_font = pygame.font.SysFont("arial",50)
+arial_font_fps = pygame.font.SysFont("arial",10)
 test_text = arial_font.render("WORMS",True,bullet_color)
-
 
 ciel = (30,144,255)
 surface.fill(ciel)
-
-
-bullet = [300,300]
-pygame.draw.circle(surface,bullet_color,bullet,10)
 
 pnj_color = (26,7,109)
 pnj = pygame.Rect(300,100,20,20)
@@ -41,10 +41,25 @@ pygame.display.flip()
 
 launched = True
 while launched:
+    clock.tick(60)
+    surface.fill(ciel)
+    text_fps = arial_font_fps.render(f"{clock.get_fps():.2f} FPS", True, pnj_color)
+
+    surface.blit(text_fps, [10, 10])
+
+    pygame.draw.circle(surface, bullet_color, bullet, 10)
+    pygame.draw.rect(surface, pnj_color, pnj)
+    pygame.draw.rect(surface, ground_color, ground)
+
+    surface.blit(test_text, [text_x, text_y])
+    pygame.display.flip()
+
+
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             launched = False
             print("exit")
+
         elif event.type == pygame.KEYDOWN:
             if event.key == pygame.K_UP:
                 print("haut")
@@ -107,12 +122,15 @@ while launched:
                 x0 = bullet[0]
                 y0 = bullet[1]
 
-                while i < 460:
+                if i >= 400:
+                    i=0
+
+                while i < 400:
                     time.sleep(.05)
                     surface.fill(ciel)
 
                     t += 0.5
-                    angle = 30
+                    angle = -1.39626
                     v0 = 75 * math.cos(angle)
                     w0 = 75 * math.sin(angle)
 
@@ -123,6 +141,8 @@ while launched:
                     pygame.draw.circle(surface, bullet_color, bullet, 10)
                     pygame.draw.rect(surface, pnj_color, pnj)
                     pygame.draw.rect(surface, ground_color, ground)
+
+                    pygame.draw.line(surface, bullet_color, [bullet[0], bullet[1]], [pnj.x, pnj.y])
 
                     surface.blit(test_text, [text_x, text_y])
                     pygame.display.flip()
@@ -159,7 +179,13 @@ while launched:
             pygame.draw.rect(surface, pnj_color, pnj)
             pygame.draw.rect(surface, ground_color, ground)
 
+            pygame.draw.line(surface, bullet_color, [bullet[0], bullet[1]], [event.pos[0],event.pos[1]])
+
             surface.blit(test_text, [text_x, text_y])
+
+            clock.tick(60)
+            surface.blit(text_fps, [10, 10])
+
             pygame.display.flip()
 
         elif event.type == pygame.MOUSEBUTTONDOWN:
@@ -175,4 +201,7 @@ while launched:
             pygame.draw.rect(surface, ground_color, ground)
 
             surface.blit(test_text, [text_x, text_y])
+
+            clock.tick(60)
+            surface.blit(text_fps, [10, 10])
             pygame.display.flip()
