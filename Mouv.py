@@ -12,6 +12,13 @@ pygame.display.set_caption("Worms")
 surface = pygame.display.set_mode(res, pygame.RESIZABLE)
 print(pygame.display.Info())
 
+sound = pygame.mixer.Sound("musique/wormstheme.mp3")
+sound.set_volume(0.30)
+rocket = pygame.mixer.Sound("musique/rocketlauncher.mp3")
+grenade = pygame.mixer.Sound("musique/grenade.mp3")
+explosion = pygame.mixer.Sound("musique/explosion.mp3")
+sound.play()
+
 bullet_color = (109,7,26)
 bullet = [10,400]
 pygame.draw.circle(surface, bullet_color, bullet, 10)
@@ -43,13 +50,14 @@ launched = True
 while launched:
     clock.tick(60)
     surface.fill(ciel)
+
     text_fps = arial_font_fps.render(f"{clock.get_fps():.2f} FPS", True, pnj_color)
 
     surface.blit(text_fps, [10, 10])
 
-    pygame.draw.circle(surface, bullet_color, bullet, 10)
     pygame.draw.rect(surface, pnj_color, pnj)
     pygame.draw.rect(surface, ground_color, ground)
+    pygame.draw.line(surface, bullet_color, [bullet[0], bullet[1]], [pnj.x, pnj.y])
 
     surface.blit(test_text, [text_x, text_y])
     pygame.display.flip()
@@ -117,6 +125,8 @@ while launched:
                 pygame.display.flip()
 
             elif event.key == pygame.K_a:
+                grenade.play()
+
                 i = bullet[1]
                 t = 0
                 x0 = bullet[0]
@@ -151,11 +161,13 @@ while launched:
 
             elif event.key == pygame.K_r:
                 print("reset")
+                explosion.play()
+
                 time.sleep(.05)
                 surface.fill(ciel)
 
-                bullet[0]=x0
-                bullet[1]=y0
+                bullet[0]=10
+                bullet[1]=400
 
                 pygame.draw.circle(surface, bullet_color, bullet, 10)
                 pygame.draw.rect(surface, pnj_color, pnj)
@@ -164,18 +176,50 @@ while launched:
                 surface.blit(test_text, [text_x, text_y])
                 pygame.display.flip()
 
+            elif event.key == pygame.K_SPACE:
+
+                jump = 0
+
+                for jump_h in range(10):
+                    time.sleep(.05)
+                    surface.fill(ciel)
+
+                    pnj.y -= jump_h
+
+                    pygame.draw.rect(surface, pnj_color, pnj)
+                    pygame.draw.rect(surface, ground_color, ground)
+
+                    pygame.draw.line(surface, bullet_color, [bullet[0], bullet[1]], [pnj.x, pnj.y])
+
+                    surface.blit(test_text, [text_x, text_y])
+                    pygame.display.flip()
+
+                for jump_d in range(10):
+                    time.sleep(.05)
+                    surface.fill(ciel)
+
+                    pnj.y += jump_d
+
+                    pygame.draw.rect(surface, pnj_color, pnj)
+                    pygame.draw.rect(surface, ground_color, ground)
+
+                    pygame.draw.line(surface, bullet_color, [bullet[0], bullet[1]], [pnj.x, pnj.y])
+
+                    surface.blit(test_text, [text_x, text_y])
+                    pygame.display.flip()
+
+
             else:
                 print("Autre key")
 
         elif event.type == pygame.MOUSEMOTION:
-            print("{}".format(event.pos))
+            #print("{}".format(event.pos))
 
             time.sleep(.005)
             surface.fill(ciel)
             pnj.x = event.pos[0]
             pnj.y = event.pos[1]
 
-            pygame.draw.circle(surface, bullet_color, bullet, 10)
             pygame.draw.rect(surface, pnj_color, pnj)
             pygame.draw.rect(surface, ground_color, ground)
 
@@ -191,12 +235,13 @@ while launched:
         elif event.type == pygame.MOUSEBUTTONDOWN:
             print("{}".format(event.pos))
 
+            rocket.play()
+
             time.sleep(.005)
             surface.fill(ciel)
             text_x = event.pos[0]
             text_y = event.pos[1]
 
-            pygame.draw.circle(surface, bullet_color, bullet, 10)
             pygame.draw.rect(surface, pnj_color, pnj)
             pygame.draw.rect(surface, ground_color, ground)
 
