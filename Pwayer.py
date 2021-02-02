@@ -10,7 +10,6 @@ class Player:
         self.__speed = 3
         self.__window = _window
         self.__grounded = False
-        self.__isJumping = False
         self.__mass = 0.2
         self.__jumpImpulse = 15
         self.actualImpulse = 0
@@ -25,9 +24,6 @@ class Player:
         elif Direction == "Right":
             self.body = self.body.move(self.__speed, 0)
 
-    def isJumping(self):
-        return self.__isJumping
-
     def isGrounded(self):
         if self.body.collidelistall(self.map):
             self.__grounded = True
@@ -38,7 +34,6 @@ class Player:
     def fall(self, g):
         if self.isGrounded():
             self.actualImpulse = 0
-            self.__isJumping = False
             return False
 
         else:
@@ -48,5 +43,4 @@ class Player:
 
     def Jump(self):
         self.actualImpulse = -self.__jumpImpulse
-        self.__isJumping = True
         self.body = self.body.move(0, self.actualImpulse)
