@@ -17,7 +17,7 @@ sound.set_volume(0.30)
 rocket = pygame.mixer.Sound("musique/rocketlauncher.mp3")
 grenade = pygame.mixer.Sound("musique/grenade.mp3")
 explosion = pygame.mixer.Sound("musique/explosion.mp3")
-#sound.play()
+sound.play()
 
 bullet_color = (109,7,26)
 bullet = [10,400]
@@ -135,7 +135,7 @@ while launched:
                 pygame.display.flip()
 
             elif event.key == pygame.K_a:
-                #grenade.play()
+                grenade.play()
 
                 i = bullet[1]
                 t = 0
@@ -171,7 +171,7 @@ while launched:
 
             elif event.key == pygame.K_r:
                 print("reset")
-                #explosion.play()
+                explosion.play()
 
                 time.sleep(.05)
                 surface.fill(ciel)
@@ -223,7 +223,7 @@ while launched:
                 print("Autre key")
 
         elif event.type == pygame.MOUSEMOTION:
-            #print("{}".format(event.pos))
+            print("{}".format(event.pos))
 
             time.sleep(.005)
             surface.fill(ciel)
@@ -268,7 +268,7 @@ while launched:
         elif event.type == pygame.MOUSEBUTTONDOWN:
             print("{}".format(event.pos))
 
-            #rocket.play()
+            rocket.play()
 
             time.sleep(.005)
             surface.fill(ciel)
