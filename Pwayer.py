@@ -37,15 +37,13 @@ class Player:
 
     def fall(self, g):
         if self.isGrounded():
+            self.actualImpulse = 0
             self.__isJumping = False
             return False
 
-        elif self.isJumping():
+        else:
             self.actualImpulse += self.__mass * g
             self.body = self.body.move(0, self.actualImpulse)
-
-        else:
-            self.body = self.body.move(0, self.__mass * g)
         return True
 
     def Jump(self):
