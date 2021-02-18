@@ -24,14 +24,14 @@ class Player:
         elif Direction == "Right":
             self.body = self.body.move(self.__speed, 0)
 
-    def isGrounded(self):
+    def isGrounded(self): #Permet de savoir si l'entiter est en colisio avec le sol
         if self.body.collidelistall(self.map):
             self.__grounded = True
         else:
             self.__grounded = False
         return self.__grounded
 
-    def fall(self, g):
+    def fall(self, g): # application de la graviter sur l'entiter et indique en fin d'apelle si le'entiter est en train de tomber
         if self.isGrounded():
             self.actualImpulse = 0
             return False
@@ -41,6 +41,7 @@ class Player:
             self.body = self.body.move(0, self.actualImpulse)
         return True
 
-    def Jump(self):
+    def Jump(self): #permet de donner une impultion pour le saut
         self.actualImpulse = -self.__jumpImpulse
         self.body = self.body.move(0, self.actualImpulse)
+
