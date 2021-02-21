@@ -19,19 +19,21 @@ class Player:
         pygame.draw.rect(self.__window, self.color, self.body)
 
     def MovePlayer(self, Direction):
-        if Direction == "Left":
-            self.body = self.body.move(-self.__speed, 0)
-        elif Direction == "Right":
-            self.body = self.body.move(self.__speed, 0)
+            if Direction == "Left":
+                if self.body.x > 0:
+                    self.body = self.body.move(-self.__speed, 0)
+            elif Direction == "Right":
+                if self.body.x < 620:
+                    self.body = self.body.move(self.__speed, 0)
 
-    def isGrounded(self): #Permet de savoir si l'entiter est en colisio avec le sol
+    def isGrounded(self):
         if self.body.collidelistall(self.map):
             self.__grounded = True
         else:
             self.__grounded = False
         return self.__grounded
 
-    def fall(self, g): # application de la graviter sur l'entiter et indique en fin d'apelle si le'entiter est en train de tomber
+    def fall(self, g):
         if self.isGrounded():
             self.actualImpulse = 0
             return False
@@ -41,7 +43,6 @@ class Player:
             self.body = self.body.move(0, self.actualImpulse)
         return True
 
-    def Jump(self): #permet de donner une impultion pour le saut
+    def Jump(self):
         self.actualImpulse = -self.__jumpImpulse
         self.body = self.body.move(0, self.actualImpulse)
-
