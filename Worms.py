@@ -65,9 +65,9 @@ x_souris = 0
 y_souris = 0
 
 weapon = 0
-player = 1
+player = random.randint(1,2)
 debug_mode = 0
-wind_speed = 0.5
+wind_speed = round(random.uniform(0,1),1)
 
 colision["ground"] = ground
 
@@ -162,6 +162,7 @@ while launched:
             #si le timer arrive à 0 change de joueur et on remet le timer à 30s
             if timer <=0 :
                 timers = time.time()
+                wind_speed = round(random.uniform(0, 1), 1)
                 if player == 1:
                     player = 2
                 elif player == 2:
@@ -277,7 +278,7 @@ while launched:
             w0 = vitesse * math.sin(angle)
 
             #trajectoire en fonction de l'arme choisie
-            for i in range(0, 20):
+            for i in range(0, 10):
                 if weapon == 0:
                     traj_bullet_x = x0 + v0 * (i * 0.5)
                     traj_bullet_y = 0.5 * g * ((i * 0.5) ** 2) + w0 * (i * 0.5) + y0
@@ -399,7 +400,7 @@ while launched:
                     v0 = vitesse * math.cos(angle)
                     w0 = vitesse * math.sin(angle)
 
-                    for i in range(0, 20):
+                    for i in range(0, 10):
                         if weapon == 0:
                             traj_bullet_x = x0 + v0 * (i*0.5)
                             traj_bullet_y = 0.5 * g * ((i*0.5) ** 2) + w0 * (i*0.5) + y0
@@ -506,14 +507,18 @@ while launched:
                         j = j+1
 
                     #si le bullet touche un personnage donc ya une mort meme si on se touche soit meme
-                    if bullet[0]+50 >= playerOne.body.x and bullet[0]-50 <= playerOne.body.x and bullet[1]+50>= playerOne.body.y:
+                    if bullet[0]+50 >= playerOne.body.x and bullet[0]+50 >= playerTwo.body.x and bullet[0]-50 <= playerOne.body.x and bullet[0]-50 <= playerTwo.body.x:
+                        status_death = 1
+                        winner = 0
+
+                    elif bullet[0]+50 >= playerOne.body.x and bullet[0]-50 <= playerOne.body.x and bullet[1]+50>= playerOne.body.y:
                         status_death=1
                         if player == 1:
                             winner = 2
                         elif player == 2:
                             winner = 2
 
-                    if bullet[0]+50 >= playerTwo.body.x and bullet[0]-50 <= playerTwo.body.x and bullet[1]+50>= playerTwo.body.y:
+                    elif bullet[0]+50 >= playerTwo.body.x and bullet[0]-50 <= playerTwo.body.x and bullet[1]+50>= playerTwo.body.y:
                         status_death=1
                         if player == 2:
                             winner = 1
@@ -523,6 +528,7 @@ while launched:
                     #personne n'est mort donc reset timer et on change de personnage
                     else :
                         timers = time.time()
+                        wind_speed = round(random.uniform(0, 1), 1)
                         if player == 1 :
                             player = 2
                         elif player == 2:
@@ -531,8 +537,12 @@ while launched:
         #écran pour afficher le winner et dire que ya une mort et un restart avec enter
         elif status_death == 1:
             surface.fill(ciel)
-            death_render = death_font.render(f"Player {winner} win", True, traj_color)
-            surface.blit(death_render, [230, 200])
+            if winner == 0:
+                death_render = death_font.render(f"No one win, its a perfect DRAW", True, traj_color)
+                surface.blit(death_render, [25, 200])
+            else:
+                death_render = death_font.render(f"Player {winner} win", True, traj_color)
+                surface.blit(death_render, [230, 200])
             Return_text = death_font.render(f"Press ENTER to Restart", True, (0, 0, 0))
             surface.blit(Return_text, [100, 270])
             pygame.display.flip()
@@ -549,4 +559,6 @@ while launched:
                         timers = time.time()
                         playerOne.body.x = random.randint(0,620)
                         playerTwo.body.x = random.randint(0, 620)
+                        playerOne.body.y = 60
+                        playerTwo.body.y = 60
 
